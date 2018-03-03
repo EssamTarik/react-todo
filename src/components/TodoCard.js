@@ -9,7 +9,9 @@ class TodoCard extends Component{
 			    <div style={{textAlign: 'right', margin: 0, padding: 0}}>
 			    	<Button style={{color: 'red'}} swapTheming tooltipLabel="Delete" icon>clear</Button>
 			    	<Button swapTheming tooltipLabel="Edit" icon>create</Button>
-			    	<Button swapTheming style={{color: 'green'}} tooltipLabel="Mark as done" icon>done</Button>
+			    	<Button onClick={() => {
+			    		this.props.markAsDone(this.props.card.key);
+			    	}} swapTheming style={{color: 'green'}} tooltipLabel={`Mark as ${this.props.complete?'undone':'done'}`} icon>done</Button>
 			    </div>
 			</Card>
 		);

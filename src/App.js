@@ -7,11 +7,19 @@ import './App.css';
 
 import {Button} from 'react-md';
 import TodoColumn from './containers/TodoColumn';
-import TestAction from './actions/TestAction';
+import DoneColumn from './containers/DoneColumn';
+import getTodos from './actions/getTodos';
+import addTodo from './actions/addTodo';
+import markAsDone from './actions/markAsDone';
+import NewTodoDialog from './components/NewTodoDialog';
 
 class App extends Component {
+  constructor(props){
+  	super(props);
+  	this.state = {AddingTodo: false};
+  }
   componentDidMount(){
-  	this.props.TestAction();
+  	this.props.getTodos();
   }
   render() {
     return (
@@ -19,21 +27,25 @@ class App extends Component {
     	<h1>Todo App</h1>
     	<hr />
     	<div className="uk-grid">
-    			<TodoColumn />
-    			<TodoColumn />
+    			<TodoColumn markAsDone={(key) => {this.props.markAsDone(key)}} items={this.props.Todos.todo} />
+    			<DoneColumn items={this.props.Todos.done}/>
 		</div>
-		<Button style={{position: 'absolute', bottom: 15, right: 15, height: 56, width: 56}} floating primary>add</Button>
+		<Button onClick={() => this.setState({AddingTodo: true})} style={{position: 'absolute', bottom: 15, right: 15, height: 56, width: 56, display: this.state.AddingTodo?'none':'block'}} floating primary>add</Button>
+		<NewTodoDialog
+			visible={this.state.AddingTodo}
+			onSubmit={(data) => {this.props.addTodo(data);}}
+			onHide={() => this.setState({AddingTodo: false})} />
 		</div>
     );
   }
 }
 
 const mapStateToProps = (state) => {
-  return {Test: state.Test};
+  return {Todos: state.Todos};
 }
 
 const mapDispatchToProps = (dispatch) => {
-	return bindActionCreators({TestAction}, dispatch);
+	return bindActionCreators({addTodo, getTodos, markAsDone}, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
