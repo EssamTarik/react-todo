@@ -33,7 +33,7 @@ export default class NewTodoDialog extends PureComponent {
           visible={this.props.visible}
           onHide={this.props.onHide}
           actions={actions}
-          title="Change something?"
+          title="Add Todo"
         >
           <TextField
             id="title"
