@@ -11,6 +11,8 @@ import DoneColumn from './containers/DoneColumn';
 import getTodos from './actions/getTodos';
 import addTodo from './actions/addTodo';
 import markAsDone from './actions/markAsDone';
+import markAsUndone from './actions/markAsUndone';
+import removeTodo from './actions/removeTodo';
 import NewTodoDialog from './components/NewTodoDialog';
 
 class App extends Component {
@@ -27,8 +29,8 @@ class App extends Component {
     	<h1>Todo App</h1>
     	<hr />
     	<div className="uk-grid">
-    			<TodoColumn markAsDone={(key) => {this.props.markAsDone(key)}} items={this.props.Todos.todo} />
-    			<DoneColumn items={this.props.Todos.done}/>
+    			<TodoColumn removeTodo={(key) => {this.props.removeTodo(key)}} markAsDone={(key) => {this.props.markAsDone(key)}} items={this.props.Todos.todo} />
+    			<DoneColumn removeTodo={(key) => {this.props.removeTodo(key)}} markAsUndone={(key) => {this.props.markAsUndone(key)}} items={this.props.Todos.done}/>
 		</div>
 		<Button onClick={() => this.setState({AddingTodo: true})} style={{position: 'absolute', bottom: 15, right: 15, height: 56, width: 56, display: this.state.AddingTodo?'none':'block'}} floating primary>add</Button>
 		<NewTodoDialog
@@ -45,7 +47,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-	return bindActionCreators({addTodo, getTodos, markAsDone}, dispatch);
+	return bindActionCreators({addTodo, getTodos, markAsDone, markAsUndone, removeTodo}, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

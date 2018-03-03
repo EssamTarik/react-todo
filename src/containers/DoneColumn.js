@@ -7,7 +7,14 @@ class TodoColumn extends Component{
 			<div className="uk-width-1-2">
 				<h3>Done</h3>
 				<hr />
-    			{this.props.items.map((item) => <TodoCard complete={true} key={item.key} card={{title: item.title, description: item.description}} />)}
+    			{this.props.items.map((item) => (
+    				<TodoCard
+    					markAsUndone={this.props.markAsUndone}
+    					complete={true}
+    					key={item.key}
+    					removeTodo={this.props.removeTodo}
+    					card={item} />
+    				))}
 			</div>
 		);
 	}
