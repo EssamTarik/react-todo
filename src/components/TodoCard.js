@@ -8,7 +8,7 @@ class TodoCard extends Component{
 			    <CardTitle title={this.props.card.title} subtitle={this.props.card.description} />
 			    <div style={{textAlign: 'right', margin: 0, padding: 0}}>
 			    	<Button onClick={() => {this.props.removeTodo(this.props.card.key)}} style={{color: 'red'}} swapTheming tooltipLabel="Delete" icon>clear</Button>
-			    	<Button swapTheming tooltipLabel="Edit" icon>create</Button>
+			    	<Button onClick={() => this.props.editTodo(this.props.card)} swapTheming tooltipLabel="Edit" icon>create</Button>
 			    	<Button
 			    	tooltipPosition={this.props.complete?'left':'bottom'}
 			    	onClick={() => {

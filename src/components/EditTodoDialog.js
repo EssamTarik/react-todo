@@ -1,10 +1,14 @@
 import React, { PureComponent } from 'react';
 import { Button, DialogContainer, TextField } from 'react-md';
 
-export default class NewTodoDialog extends PureComponent {
+export default class EditTodoDialog extends PureComponent {
   constructor(props){
     super(props);
     this.state = {title: '', description: '', errors: {}};
+  }
+  componentWillReceiveProps(nextProps){
+    if(nextProps.item.key && this.props.item.key !== nextProps.item.key)
+      this.setState({title: nextProps.item.title, description: nextProps.item.description, errors: {}});
   }
   validate(){
     let errors = {};
@@ -14,15 +18,15 @@ export default class NewTodoDialog extends PureComponent {
       errors['description'] = 'This Field can\'t be empty';
     this.setState({errors});
     if(Object.keys(errors).length === 0){
-      this.setState({title: '', description: ''});
       this.props.onHide();
-      this.props.onSubmit({title: this.state.title, description: this.state.description, complete: false});
+      this.props.onSubmit({title: this.state.title, description: this.state.description, key: this.props.item.key});
     }
   }
   submit(){
     this.validate();
   }
   render() {
+    console.log(this.props.item);
     const actions = [];
     actions.push({ secondary: true, children: 'Cancel', onClick: this.props.onHide });
     actions.push(<Button flat primary onClick={() => this.submit()}>Confirm</Button>);

@@ -10,6 +10,7 @@ class TodoColumn extends Component{
     			{this.props.items.map((item) => (
     				<TodoCard
     				key={item.key}
+    				editTodo={this.props.editTodo}
     				markAsDone={this.props.markAsDone}
     				removeTodo={this.props.removeTodo}
     				card={item} />

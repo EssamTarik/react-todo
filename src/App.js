@@ -10,15 +10,17 @@ import TodoColumn from './containers/TodoColumn';
 import DoneColumn from './containers/DoneColumn';
 import getTodos from './actions/getTodos';
 import addTodo from './actions/addTodo';
+import editTodo from './actions/editTodo';
 import markAsDone from './actions/markAsDone';
 import markAsUndone from './actions/markAsUndone';
 import removeTodo from './actions/removeTodo';
 import NewTodoDialog from './components/NewTodoDialog';
+import EditTodoDialog from './components/EditTodoDialog';
 
 class App extends Component {
   constructor(props){
   	super(props);
-  	this.state = {AddingTodo: false};
+  	this.state = {AddingTodo: false, EditingTodo: false, EditedItem: {}};
   }
   componentDidMount(){
   	this.props.getTodos();
@@ -29,14 +31,20 @@ class App extends Component {
     	<h1>Todo App</h1>
     	<hr />
     	<div className="uk-grid">
-    			<TodoColumn removeTodo={(key) => {this.props.removeTodo(key)}} markAsDone={(key) => {this.props.markAsDone(key)}} items={this.props.Todos.todo} />
-    			<DoneColumn removeTodo={(key) => {this.props.removeTodo(key)}} markAsUndone={(key) => {this.props.markAsUndone(key)}} items={this.props.Todos.done}/>
+    			<TodoColumn editTodo={(item) => {this.setState({EditingTodo: true, EditedItem: item})}} removeTodo={(key) => {this.props.removeTodo(key)}} markAsDone={(key) => {this.props.markAsDone(key)}} items={this.props.Todos.todo} />
+    			<DoneColumn editTodo={(item) => {this.setState({EditingTodo: true, EditedItem: item})}} removeTodo={(key) => {this.props.removeTodo(key)}} markAsUndone={(key) => {this.props.markAsUndone(key)}} items={this.props.Todos.done}/>
 		</div>
-		<Button onClick={() => this.setState({AddingTodo: true})} style={{position: 'absolute', bottom: 15, right: 15, height: 56, width: 56, display: this.state.AddingTodo?'none':'block'}} floating primary>add</Button>
+		<Button onClick={() => this.setState({AddingTodo: true})} style={{position: 'fixed', bottom: 15, right: 15, height: 56, width: 56}} floating primary>add</Button>
 		<NewTodoDialog
 			visible={this.state.AddingTodo}
 			onSubmit={(data) => {this.props.addTodo(data);}}
 			onHide={() => this.setState({AddingTodo: false})} />
+
+    <EditTodoDialog
+      visible={this.state.EditingTodo}
+      item={this.state.EditedItem}
+      onSubmit={(data) => {this.props.editTodo(data.key, data);}}
+      onHide={() => this.setState({EditingTodo: false})} />
 		</div>
     );
   }
@@ -47,7 +55,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-	return bindActionCreators({addTodo, getTodos, markAsDone, markAsUndone, removeTodo}, dispatch);
+	return bindActionCreators({addTodo, getTodos, markAsDone, markAsUndone, removeTodo, editTodo}, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
